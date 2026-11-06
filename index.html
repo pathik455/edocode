@@ -62,16 +62,16 @@
       z-index: 2;
     }
 
-    /* Top Minimalist Brand Bar */
+    /* Top Brand Bar: Logo in top-left, top-right completely clean */
     header {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       z-index: 20;
-      padding: 24px 36px;
+      padding: 28px 40px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start; /* Clean top-right, logo anchored at top-left */
       align-items: center;
       pointer-events: none;
     }
@@ -83,50 +83,22 @@
       pointer-events: auto;
     }
 
-    /* Hero Wordmark in Top-Left */
+    /* Prominent Hero Wordmark in Top-Left */
     .brand-hero-logo {
-      height: 44px;
+      height: 64px;
       width: auto;
-      max-width: 260px;
+      max-width: 320px;
       object-fit: contain;
-      filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.8));
-      transition: opacity 0.2s ease;
+      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.8));
+      transition: transform 0.22s ease, opacity 0.22s ease;
     }
 
     .brand-hero-logo:hover {
-      opacity: 0.85;
+      transform: scale(1.03);
+      opacity: 0.95;
     }
 
-    .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 7px 16px;
-      border-radius: 999px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--gray-400);
-      backdrop-filter: blur(12px);
-      pointer-events: auto;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green);
-      animation: pulse-dot 2s infinite ease-in-out;
-    }
-
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.8); }
-    }
-
-    /* Main Container: Perfectly Centered, NEVER Cuts the Screen */
+    /* Main Container: Centered stage */
     main {
       position: relative;
       z-index: 5;
@@ -138,7 +110,7 @@
       justify-content: center;
       align-items: center;
       padding: 16px;
-      gap: 28px;
+      gap: 24px;
     }
 
     /* Square Responsive Spinner Stage: Sized to fit BOTH width and height */
@@ -225,6 +197,7 @@
       color: var(--gray-400);
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      transition: color 0.2s ease;
     }
 
     /* Floating Interactive Cursor Pill */
@@ -282,8 +255,8 @@
         padding: 16px 20px;
       }
       .brand-hero-logo {
-        height: 36px;
-        max-width: 180px;
+        height: 48px;
+        max-width: 220px;
       }
       .spinner-wrapper {
         width: min(86vw, 58vh);
@@ -305,17 +278,12 @@
   <div class="bg-grid"></div>
   <canvas id="particles-canvas"></canvas>
 
-  <!-- Top Minimalist Brand Bar -->
+  <!-- Top Brand Bar: Logo in top-left, top-right completely empty -->
   <header>
     <a href="https://edocode.co.in" class="brand-tag" title="EDOCODE">
       <!-- Official Brand Kit edocode-wordmark-hero.svg in Top-Left -->
       <img src="assets/logos/edocode-wordmark-hero.svg" alt="EDOCODE" class="brand-hero-logo" />
     </a>
-
-    <div class="status-pill">
-      <div class="status-dot"></div>
-      <span>SYSTEM ACTIVE • edocode.co.in</span>
-    </div>
   </header>
 
   <!-- Main Stage: Perfectly Centered, Clean OLED Black -->
@@ -327,50 +295,51 @@
 
         <!-- ======================================================== -->
         <!-- SPINNING ROTOR: Palindromic EDO (left) and ODE (right)   -->
-        <!-- Cruising speed: exactly 8.00s per rotation (45 deg/sec)  -->
-        <!-- Clearance gap: > 53px from center logo (zero collision!) -->
+        <!-- Dynamic docking gap:                                     -->
+        <!--   - Spinning: expands outward by +80px for clearance     -->
+        <!--   - Stopped: retracts inward to tight 40px kerning gap   -->
         <!-- ======================================================== -->
         <g id="spinner-rotor" transform="rotate(0)">
           
-          <!-- LEFT WING: E D O (Inner edge of O starts at x = -280) -->
-          <g id="wing-edo">
-            <!-- Letter E (-1190 to -930) -->
+          <!-- LEFT WING: E D O (starts at -1110, inner O ends at -200) -->
+          <g id="wing-edo" transform="translate(0, 0)">
+            <!-- Letter E (-1110 to -850) -->
             <path d="
               M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
-            " fill="#FFFFFF" transform="translate(-1190, -160)"/>
+            " fill="#FFFFFF" transform="translate(-1110, -160)"/>
             
-            <!-- Letter D (-890 to -610) -->
+            <!-- Letter D (-810 to -530) -->
             <path d="
               M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
               M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-890, -160)"/>
+            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-810, -160)"/>
 
-            <!-- Letter O (-570 to -280) -->
+            <!-- Letter O (-490 to -200) -->
             <path d="
               M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
               M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-570, -160)"/>
+            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-490, -160)"/>
           </g>
 
-          <!-- RIGHT WING: O D E (Inner edge of O starts at x = +280) -->
+          <!-- RIGHT WING: O D E (inner O starts at +200, ends at +1110) -->
           <!-- Point reflection of E D O across (0, 0) -->
-          <g id="wing-ode">
-            <!-- Letter O (+280 to +570) -->
+          <g id="wing-ode" transform="translate(0, 0)">
+            <!-- Letter O (+200 to +490) -->
             <path d="
               M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
               M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(280, -160)"/>
+            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(200, -160)"/>
 
-            <!-- Letter D (+610 to +890) -->
+            <!-- Letter D (+530 to +810) -->
             <path d="
               M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
               M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(610, -160)"/>
+            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(530, -160)"/>
 
-            <!-- Letter E (+930 to +1190) -->
+            <!-- Letter E (+850 to +1110) -->
             <path d="
               M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
-            " fill="#FFFFFF" transform="translate(930, -160)"/>
+            " fill="#FFFFFF" transform="translate(850, -160)"/>
           </g>
         </g>
 
@@ -451,7 +420,14 @@
     let isAligning = false;
     let alignTargetAngle = 0;
 
+    // Dynamic wing offset:
+    // 0 = stopped state (docked tight: 40px kerning gap between letters and logo)
+    // 80 = spinning state (expanded outward: 120px gap for full rotation clearance)
+    let wingOffset = 80;
+
     const rotor = document.getElementById('spinner-rotor');
+    const wingEdo = document.getElementById('wing-edo');
+    const wingOde = document.getElementById('wing-ode');
     const svgElement = document.getElementById('spinner-svg');
     const container = document.getElementById('spinner-container');
     const btnToggle = document.getElementById('btn-toggle-spin');
@@ -606,9 +582,7 @@
       isStopped = false;
       
       // Calculate next upright horizontal landing (clean multiple of 360 deg)
-      // Landing at 0 / 360 deg aligns cleanly as: EDO [LOGO] ODE
       const currentRev = angle / 360;
-      // Complete current rotation and land gracefully
       alignTargetAngle = Math.ceil(currentRev + 0.35) * 360;
       
       btnToggle.classList.add('stopped');
@@ -621,7 +595,7 @@
       isAligning = false;
       isStopped = false;
       targetSpeed = CRUISE_SPEED;
-      currentSpeed = 30; // Smooth startup ramp
+      currentSpeed = 25; // Smooth startup ramp
 
       btnToggle.classList.remove('stopped');
       btnIcon.textContent = '⏸';
@@ -661,7 +635,6 @@
         // Ultra-smooth cubic ease-out alignment deceleration towards alignTargetAngle (0 deg horizontal)
         const dist = alignTargetAngle - angle;
         if (dist > 0.15) {
-          // Smooth deceleration interpolation
           const step = Math.max(0.4, dist * 0.085);
           angle += step;
         } else {
@@ -682,6 +655,16 @@
         currentSpeed += (targetSpeed - currentSpeed) * Math.min(1, delta * 12);
         angle = (angle + currentSpeed * delta) % 360;
       }
+
+      // Smooth hydraulic wing docking animation:
+      // When stopped: targetOffset = 0 (tight 40px gap)
+      // When spinning: targetOffset = 80 (clearance gap for rotation)
+      const targetOffset = isStopped ? 0 : 80;
+      wingOffset += (targetOffset - wingOffset) * Math.min(1, delta * 7);
+
+      // Apply wing offsets
+      wingEdo.setAttribute('transform', `translate(${-wingOffset.toFixed(2)}, 0)`);
+      wingOde.setAttribute('transform', `translate(${wingOffset.toFixed(2)}, 0)`);
 
       // Apply rotation to SVG rotor
       rotor.setAttribute('transform', `rotate(${angle.toFixed(2)})`);
