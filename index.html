@@ -14,10 +14,7 @@
       --bg: #000000;
       --green: #25D366;
       --green-glow: rgba(37, 211, 102, 0.45);
-      --green-subtle: rgba(37, 211, 102, 0.12);
       --white: #FFFFFF;
-      --gray-400: #888888;
-      --gray-600: #4b5563;
     }
 
     * {
@@ -230,11 +227,11 @@
       border: 1px solid var(--green);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 25px var(--green-glow);
       backdrop-filter: blur(16px);
-      padding: 8px 16px;
+      padding: 6px 14px;
       border-radius: 999px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       white-space: nowrap;
       transition: opacity 0.2s ease;
       opacity: 0;
@@ -257,6 +254,7 @@
     }
 
     .cursor-pill .text {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.08em;
@@ -310,7 +308,7 @@
 
   <!-- Main Stage: Perfectly Centered, Clean OLED Black -->
   <main>
-    <div class="spinner-wrapper" id="spinner-container" title="Click logo to spin faster like a fidget spinner!">
+    <div class="spinner-wrapper" id="spinner-container">
 
       <!-- Master SVG Stage: viewBox centered at (0, 0) with generous clearance -->
       <svg class="spinner-svg" id="spinner-svg" viewBox="-1400 -1400 2800 2800">
@@ -423,10 +421,10 @@
     </div>
   </main>
 
-  <!-- Floating Dynamic Cursor Tooltip -->
+  <!-- Floating Dynamic Cursor Tooltip: Spinning icon and RPM count -->
   <div class="cursor-pill" id="cursor-pill">
-    <span class="icon">🌀</span>
-    <span class="text" id="cursor-text">CLICK TO SPIN <span class="highlight">FASTER</span></span>
+    <span class="icon" id="cursor-icon">🌀</span>
+    <span class="text" id="cursor-text"><span class="highlight">8</span> RPM</span>
   </div>
 
   <script>
@@ -456,6 +454,7 @@
     const btnText = document.getElementById('btn-text');
     const cursorPill = document.getElementById('cursor-pill');
     const cursorText = document.getElementById('cursor-text');
+    const cursorIcon = document.getElementById('cursor-icon');
 
     // --- Web Audio Synthesizer (Realistic Ceramic Bearing Whir) ---
     let audioCtx = null;
@@ -687,16 +686,16 @@
       // Apply rotation to SVG rotor
       rotor.setAttribute('transform', `rotate(${angle.toFixed(2)})`);
 
-      // Update Cursor Pill text
+      // Update Cursor Pill: spinning icon as cursor follower and precision RPM count (no 8s/rot message)
       const rpm = Math.round((currentSpeed / 360) * 60);
-      if (isStopped) {
-        cursorText.innerHTML = `ALIGNED HORIZONTALLY • <span class="highlight">CLICK TO SPIN</span>`;
-      } else if (rpm >= 300) {
-        cursorText.innerHTML = `⚡ <span class="highlight">SUPERSONIC SPINNER!</span> (${rpm} RPM)`;
-      } else if (rpm > 12) {
-        cursorText.innerHTML = `🔥 <span class="highlight">SPINNING FAST!</span> (${rpm} RPM)`;
-      } else {
-        cursorText.innerHTML = `CRUISING (8s/rot) • <span class="highlight">CLICK TO SPIN FASTER</span>`;
+      cursorText.innerHTML = `<span class="highlight">${rpm}</span> RPM`;
+
+      if (cursorIcon) {
+        cursorIcon.style.animationPlayState = isStopped ? 'paused' : 'running';
+        if (!isStopped) {
+          const iconDuration = Math.max(0.18, 12 / Math.max(1, rpm));
+          cursorIcon.style.animationDuration = `${iconDuration.toFixed(2)}s`;
+        }
       }
 
       // Hyperspin glow
