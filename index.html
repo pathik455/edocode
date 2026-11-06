@@ -34,7 +34,7 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow: hidden;
       position: relative;
-      cursor: crosshair;
+      cursor: default;
     }
 
     /* Ambient background grid */
@@ -59,16 +59,16 @@
       z-index: 6;
     }
 
-    /* Top Brand Bar: Logo in top-left, top-right completely clean */
+    /* Top Brand Bar: Logo in top-left, instruction in top-center */
     header {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      z-index: 20;
+      z-index: 25;
       padding: 28px 40px;
       display: flex;
-      justify-content: flex-start; /* Clean top-right, logo anchored at top-left */
+      justify-content: space-between;
       align-items: center;
       pointer-events: none;
     }
@@ -78,6 +78,68 @@
       align-items: center;
       text-decoration: none;
       pointer-events: auto;
+    }
+
+    /* Top Instruction Pill: High-contrast, clean entry guide */
+    .top-instruction {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(10, 10, 10, 0.88);
+      border: 1.5px solid rgba(37, 211, 102, 0.4);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 16px rgba(37, 211, 102, 0.15);
+      padding: 9px 22px;
+      border-radius: 999px;
+      pointer-events: auto;
+      user-select: none;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+    }
+
+    .top-instruction:hover {
+      border-color: var(--green);
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9), 0 0 24px var(--green-glow);
+    }
+
+    .top-instruction.active {
+      border-color: var(--green);
+      box-shadow: 0 0 22px var(--green-glow);
+    }
+
+    .top-instruction.hyperspin {
+      border-color: #FFFFFF;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4), 0 0 35px var(--green-glow);
+    }
+
+    .instruction-beacon {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: beacon-pulse 2s infinite ease-in-out;
+      flex-shrink: 0;
+    }
+
+    @keyframes beacon-pulse {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .instruction-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      white-space: nowrap;
     }
 
     /* Refined Wordmark in Top-Left */
@@ -124,17 +186,33 @@
       touch-action: manipulation;
     }
 
-    /* Master SVG Stage */
+    /* Static Ambient Shadow & Glow: Applied to non-rotating container layer so GPU never re-rasterizes vectors */
+    .spinner-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: -6%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.10) 0%, rgba(0, 0, 0, 0) 65%);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    .spinner-wrapper.hyperspin::before {
+      opacity: 1;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.24) 0%, rgba(0, 0, 0, 0) 70%);
+    }
+
+    /* Master SVG Stage: 100% clean vector rendering, zero rotating filter overhead */
     .spinner-svg {
       width: 100%;
       height: 100%;
       overflow: visible;
-      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.9));
-      transition: filter 0.15s ease-out;
-    }
-
-    .spinner-svg.hyperspin {
-      filter: drop-shadow(0 0 45px var(--green-glow)) drop-shadow(0 20px 60px rgba(0, 0, 0, 0.95));
+      filter: none !important;
+      position: relative;
+      z-index: 1;
+      will-change: transform;
     }
 
     /* Pure Rectangular Stop Button */
@@ -216,60 +294,27 @@
       opacity: 0.75;
     }
 
-    /* Floating Interactive Cursor Pill */
-    .cursor-pill {
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 1000;
-      background: rgba(10, 10, 10, 0.92);
-      border: 1px solid var(--green);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 25px var(--green-glow);
-      backdrop-filter: blur(16px);
-      padding: 6px 14px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-      transition: opacity 0.2s ease;
-      opacity: 0;
-      transform: translate(-50%, -140%);
-    }
-
-    .cursor-pill.visible {
-      opacity: 1;
-    }
-
-    .cursor-pill .icon {
-      font-size: 13px;
-      display: inline-block;
-      animation: spin-icon 1.5s infinite linear;
-    }
-
-    @keyframes spin-icon {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .cursor-pill .text {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--white);
-    }
-
-    .cursor-pill .highlight {
-      color: var(--green);
-    }
-
     /* Mobile adjustments */
     @media (max-width: 768px) {
       header {
-        padding: 16px 20px;
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand-tag {
+        align-self: flex-start;
+      }
+      .top-instruction {
+        position: static;
+        transform: none;
+        padding: 7px 16px;
+        gap: 8px;
+        max-width: calc(100vw - 32px);
+      }
+      .instruction-text {
+        font-size: 10px;
+        letter-spacing: 0.07em;
       }
       .brand-hero-logo {
         height: 24px;
@@ -278,9 +323,6 @@
       .spinner-wrapper {
         width: min(86vw, 54vh);
         height: min(86vw, 54vh);
-      }
-      .cursor-pill {
-        display: none;
       }
       .btn-rect {
         padding: 10px 24px;
@@ -313,12 +355,18 @@
   <!-- Big Faded Web-Responsive "COMING SOON" Background Text (Reverse Fade) -->
   <div class="bg-coming-soon" aria-hidden="true">COMING SOON</div>
 
-  <!-- Top Brand Bar: Logo in top-left, top-right completely empty -->
+  <!-- Top Brand Bar: Logo in top-left, instruction in top-center -->
   <header>
     <a href="https://edocode.co.in" class="brand-tag" title="EDOCODE">
       <!-- Official Brand Kit edocode-wordmark-hero.svg in Top-Left -->
       <img src="assets/logos/edocode-wordmark-hero.svg" alt="EDOCODE" class="brand-hero-logo" />
     </a>
+
+    <!-- Top Instruction Pill: Spin to enter the website -->
+    <div class="top-instruction" id="top-instruction" role="button" tabindex="0" title="Click or spin to enter">
+      <span class="instruction-beacon" aria-hidden="true"></span>
+      <span class="instruction-text" id="instruction-text">SPIN THE SPINNER TO ENTER THE WEBSITE</span>
+    </div>
   </header>
 
   <!-- Main Stage: Perfectly Centered, Clean OLED Black -->
@@ -436,12 +484,6 @@
     </div>
   </main>
 
-  <!-- Floating Dynamic Cursor Tooltip: Spinning icon and RPM count -->
-  <div class="cursor-pill" id="cursor-pill">
-    <span class="icon" id="cursor-icon">🌀</span>
-    <span class="text" id="cursor-text"><span class="highlight">8</span> RPM</span>
-  </div>
-
   <script>
     // --- Physics & Rotation State ---
     // 8.00s per rotation = 360 deg / 8s = 45 deg/sec (7.5 RPM)
@@ -467,9 +509,8 @@
     const btnToggle = document.getElementById('btn-toggle-spin');
     const btnIcon = document.getElementById('btn-icon');
     const btnText = document.getElementById('btn-text');
-    const cursorPill = document.getElementById('cursor-pill');
-    const cursorText = document.getElementById('cursor-text');
-    const cursorIcon = document.getElementById('cursor-icon');
+    const topInstruction = document.getElementById('top-instruction');
+    const instructionText = document.getElementById('instruction-text');
 
     // --- Web Audio Synthesizer (Realistic Ceramic Bearing Whir) ---
     let audioCtx = null;
@@ -529,12 +570,13 @@
       whirGain.gain.setTargetAtTime(targetVol, audioCtx.currentTime, 0.1);
     }
 
-    // --- 4K Game VFX: Rising Green Atmospheric Gas Particles & Sparks ---
+    // --- High-Performance Ambient VFX: Rising Green Gas Particles & Sparks ---
     const canvas = document.getElementById('particles-canvas');
     const ctx = canvas.getContext('2d');
     const sparks = [];
     const gasParticles = [];
-    const GAS_COUNT = 65;
+    const isMobileDevice = window.innerWidth <= 768 || ('ontouchstart' in window);
+    const GAS_COUNT = isMobileDevice ? 22 : 45;
 
     function createGasParticle(initialSpread = false) {
       const h = window.innerHeight;
@@ -582,7 +624,8 @@
     }
 
     function resizeCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const mobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+      const dpr = mobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       if (ctx.resetTransform) {
@@ -620,7 +663,7 @@
 
       ctx.clearRect(0, 0, w, h);
 
-      // 1. Draw Rising Green Gas Particles (4K Game Atmospheric VFX)
+      // 1. Draw Rising Green Gas Particles (Zero shadowBlur - pure hardware-accelerated dual-arc glow)
       ctx.save();
       ctx.globalCompositeOperation = 'lighter'; // Additive blending for luminous energy glow
 
@@ -638,10 +681,6 @@
         const currentDist = p.groundY - p.y;
         const progress = Math.min(1.0, Math.max(0, currentDist / totalDist));
 
-        // Smooth fade curve:
-        // - In bottom 15%: fade in from 0 to full alpha
-        // - Middle 15%-65%: sustain with subtle organic breathing pulse
-        // - Upper 65%-100%: smooth fade-out to 0 at exactly 60% height
         let alpha = p.baseAlpha;
         if (progress <= 0.15) {
           alpha = p.baseAlpha * (progress / 0.15);
@@ -673,26 +712,29 @@
           rColor = 16; gColor = 185; bColor = 129;
         }
 
-        ctx.shadowColor = `rgba(${rColor}, ${gColor}, ${bColor}, ${Math.min(1, alpha * 1.2)})`;
-        ctx.shadowBlur = p.radius * 3.8;
-        ctx.fillStyle = `rgba(${rColor}, ${gColor}, ${bColor}, ${alpha.toFixed(3)})`;
+        // Outer soft radiant halo (0ms overhead, zero Gaussian blur passes)
+        ctx.fillStyle = `rgba(${rColor}, ${gColor}, ${bColor}, ${(alpha * 0.28).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * 2.2, 0, Math.PI * 2);
+        ctx.fill();
 
+        // Inner glowing core
+        ctx.fillStyle = `rgba(${rColor}, ${gColor}, ${bColor}, ${alpha.toFixed(3)})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
 
         // High-end inner core for larger embers
         if (p.radius > 2.8) {
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = `rgba(255, 255, 255, ${(alpha * 0.7).toFixed(3)})`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${(alpha * 0.75).toFixed(3)})`;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius * 0.4, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, p.radius * 0.45, 0, Math.PI * 2);
           ctx.fill();
         }
       }
       ctx.restore();
 
-      // 2. Draw Click Sparks
+      // 2. Draw Click Sparks (zero shadowBlur)
       for (let i = sparks.length - 1; i >= 0; i--) {
         const p = sparks[i];
         p.x += p.vx;
@@ -708,8 +750,6 @@
         ctx.save();
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
@@ -742,6 +782,13 @@
     container.addEventListener('pointerdown', (e) => {
       accelerate(420, e.clientX, e.clientY);
     });
+
+    // Top instruction click to spin
+    if (topInstruction) {
+      topInstruction.addEventListener('click', () => {
+        accelerate(420);
+      });
+    }
 
     // --- Stop & Align Button Logic ---
     function stopAndAlign() {
@@ -776,18 +823,39 @@
       }
     });
 
-    // --- Dynamic Cursor Tooltip ---
-    let mouseX = -200, mouseY = -200;
-    window.addEventListener('pointermove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursorPill.style.transform = `translate(${mouseX + 16}px, ${mouseY - 48}px)`;
-      cursorPill.classList.add('visible');
-    });
+    // --- Dynamic Top Instruction Logic ---
+    let lastInstructionState = '';
+    function updateTopInstruction(rpm) {
+      if (!topInstruction || !instructionText) return;
 
-    document.addEventListener('pointerleave', () => {
-      cursorPill.classList.remove('visible');
-    });
+      let newState = 'idle';
+      if (isStopped) {
+        newState = 'stopped';
+      } else if (rpm > 280) {
+        newState = 'hyperspin';
+      } else if (rpm > 70) {
+        newState = 'spinning';
+      }
+
+      // Zero DOM mutations if state hasn't changed
+      if (newState === lastInstructionState) return;
+      lastInstructionState = newState;
+
+      if (newState === 'stopped') {
+        instructionText.textContent = 'SPIN THE SPINNER TO ENTER THE WEBSITE';
+        topInstruction.classList.remove('active', 'hyperspin');
+      } else if (newState === 'hyperspin') {
+        instructionText.innerHTML = '<span style="color:var(--green)">⚡ ACCESS UNLOCKED • ENTERING EDOCODE</span>';
+        topInstruction.classList.add('hyperspin');
+      } else if (newState === 'spinning') {
+        instructionText.innerHTML = '<span style="color:var(--green)">SPINNING TO ENTER...</span>';
+        topInstruction.classList.add('active');
+        topInstruction.classList.remove('hyperspin');
+      } else {
+        instructionText.textContent = 'SPIN THE SPINNER TO ENTER THE WEBSITE';
+        topInstruction.classList.remove('active', 'hyperspin');
+      }
+    }
 
     // --- Main Physics Loop ---
     let lastTime = performance.now();
@@ -834,25 +902,16 @@
       // Apply rotation to SVG rotor
       rotor.setAttribute('transform', `rotate(${angle.toFixed(2)})`);
 
-      // Update Cursor Pill: spinning icon as cursor follower and precision RPM count (no 8s/rot message)
       const rpm = Math.round((currentSpeed / 360) * 60);
-      cursorText.innerHTML = `<span class="highlight">${rpm}</span> RPM`;
 
-      if (cursorIcon) {
-        cursorIcon.style.animationPlayState = isStopped ? 'paused' : 'running';
-        if (!isStopped) {
-          const iconDuration = Math.max(0.18, 12 / Math.max(1, rpm));
-          cursorIcon.style.animationDuration = `${iconDuration.toFixed(2)}s`;
-        }
-      }
-
-      // Hyperspin glow
+      // Hyperspin glow on static container layer (never causes vector re-rasterization)
       if (rpm > 280) {
-        svgElement.classList.add('hyperspin');
+        container.classList.add('hyperspin');
       } else {
-        svgElement.classList.remove('hyperspin');
+        container.classList.remove('hyperspin');
       }
 
+      updateTopInstruction(rpm);
       updateAudioWhir(currentSpeed);
       updateParticles(now);
 
