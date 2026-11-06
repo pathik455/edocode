@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>EDOCODE • Palindromic Fidget Spinner</title>
   <meta name="description" content="EDOCODE — Static brand mark with spinning palindromic EDO and ODE wings.">
   <link rel="icon" type="image/svg+xml" href="assets/logos/edocode-favicon.svg">
@@ -276,8 +276,8 @@
         max-width: 130px;
       }
       .spinner-wrapper {
-        width: min(86vw, 58vh);
-        height: min(86vw, 58vh);
+        width: min(86vw, 54vh);
+        height: min(86vw, 54vh);
       }
       .cursor-pill {
         display: none;
@@ -285,6 +285,21 @@
       .btn-rect {
         padding: 10px 24px;
         font-size: 11px;
+      }
+      .bg-coming-soon {
+        bottom: max(32px, env(safe-area-inset-bottom, 32px));
+        font-size: clamp(18px, 5.8vw, 30px);
+        letter-spacing: 0.06em;
+        line-height: 1.1;
+        opacity: 0.95;
+        background: linear-gradient(0deg, 
+          rgba(255, 255, 255, 0.90) 0%, 
+          rgba(255, 255, 255, 0.60) 50%, 
+          rgba(255, 255, 255, 0.25) 85%, 
+          rgba(255, 255, 255, 0.0) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     }
   </style>
