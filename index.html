@@ -147,7 +147,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
     }
 
     .btn-rect {
@@ -191,13 +190,35 @@
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
     }
 
-    .hint-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--gray-400);
-      letter-spacing: 0.1em;
+    /* Big Faded Web-Responsive "COMING SOON" Background Text (Reverse Fade) */
+    .bg-coming-soon {
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      text-align: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 900;
+      font-size: clamp(34px, 11.2vw, 220px);
+      letter-spacing: -0.035em;
+      line-height: 0.85;
       text-transform: uppercase;
-      transition: color 0.2s ease;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 2;
+      user-select: none;
+      color: rgba(255, 255, 255, 0.22);
+      background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.25) 0%, 
+        rgba(255, 255, 255, 0.12) 35%, 
+        rgba(255, 255, 255, 0.02) 75%, 
+        transparent 96%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.65) 45%, rgba(0, 0, 0, 0) 95%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.65) 45%, rgba(0, 0, 0, 0) 95%);
     }
 
     /* Floating Interactive Cursor Pill */
@@ -277,6 +298,9 @@
   <!-- Ambient Grid & Particles -->
   <div class="bg-grid"></div>
   <canvas id="particles-canvas"></canvas>
+
+  <!-- Big Faded Web-Responsive "COMING SOON" Background Text (Reverse Fade) -->
+  <div class="bg-coming-soon" aria-hidden="true">COMING SOON</div>
 
   <!-- Top Brand Bar: Logo in top-left, top-right completely empty -->
   <header>
@@ -398,7 +422,6 @@
         <span id="btn-icon">⏸</span>
         <span id="btn-text">STOP &amp; ALIGN</span>
       </button>
-      <span class="hint-label" id="hint-text">CLICK LOGO TO SPIN FASTER LIKE A FIDGET SPINNER</span>
     </div>
   </main>
 
@@ -433,7 +456,6 @@
     const btnToggle = document.getElementById('btn-toggle-spin');
     const btnIcon = document.getElementById('btn-icon');
     const btnText = document.getElementById('btn-text');
-    const hintText = document.getElementById('hint-text');
     const cursorPill = document.getElementById('cursor-pill');
     const cursorText = document.getElementById('cursor-text');
 
@@ -588,7 +610,6 @@
       btnToggle.classList.add('stopped');
       btnIcon.textContent = '▶';
       btnText.textContent = 'START SPINNER';
-      hintText.textContent = 'STOPPED & ALIGNED: EDO [LOGO] ODE';
     }
 
     function startSpinning() {
@@ -600,7 +621,6 @@
       btnToggle.classList.remove('stopped');
       btnIcon.textContent = '⏸';
       btnText.textContent = 'STOP & ALIGN';
-      hintText.textContent = 'CLICK LOGO TO SPIN FASTER LIKE A FIDGET SPINNER';
     }
 
     btnToggle.addEventListener('click', () => {
