@@ -49,14 +49,14 @@
       z-index: 1;
     }
 
-    /* Particle canvas for sparks */
+    /* Particle canvas for 4K game-style rising green gas & sparks */
     #particles-canvas {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 2;
+      z-index: 6;
     }
 
     /* Top Brand Bar: Logo in top-left, top-right completely clean */
@@ -514,14 +514,69 @@
       whirGain.gain.setTargetAtTime(targetVol, audioCtx.currentTime, 0.1);
     }
 
-    // --- Particle Spark System ---
+    // --- 4K Game VFX: Rising Green Atmospheric Gas Particles & Sparks ---
     const canvas = document.getElementById('particles-canvas');
     const ctx = canvas.getContext('2d');
-    let particles = [];
+    const sparks = [];
+    const gasParticles = [];
+    const GAS_COUNT = 65;
+
+    function createGasParticle(initialSpread = false) {
+      const h = window.innerHeight;
+      const w = window.innerWidth;
+
+      // Float upwards from ground (h) to 60% up (reaching ceiling at h * 0.40)
+      const groundY = h + Math.random() * 30;
+      const ceilingY = h * 0.40; // 60% rise from ground
+
+      const y = initialSpread
+        ? groundY - Math.random() * (groundY - ceilingY)
+        : groundY;
+
+      // Varied radius: fine ambient vapor (1.2px) to luminous gas embers (5.2px)
+      const rSeed = Math.random();
+      const radius = rSeed > 0.85 
+        ? Math.random() * 2.2 + 3.0   // 3.0 - 5.2px hero embers
+        : Math.random() * 1.8 + 1.2;  // 1.2 - 3.0px atmospheric vapor
+
+      return {
+        baseX: Math.random() * w,
+        x: 0,
+        y: y,
+        groundY: groundY,
+        ceilingY: ceilingY,
+        // Vertical velocity: varied float speeds (0.35 to 1.15 px/frame)
+        vy: Math.random() * 0.75 + 0.38,
+        // Gaseous fluid swaying
+        swayAmp: Math.random() * 28 + 12,
+        swayFreq: Math.random() * 1.6 + 0.7,
+        swayPhase: Math.random() * Math.PI * 2,
+        radius: radius,
+        baseAlpha: Math.random() * 0.45 + 0.35,
+        pulseSpeed: Math.random() * 2.5 + 1.0,
+        // Color tint: 75% official brand green, 15% electric mint, 10% emerald
+        colorType: Math.random() > 0.25 ? 0 : (Math.random() > 0.4 ? 1 : 2)
+      };
+    }
+
+    function initGasParticles() {
+      gasParticles.length = 0;
+      for (let i = 0; i < GAS_COUNT; i++) {
+        gasParticles.push(createGasParticle(true));
+      }
+    }
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      if (ctx.resetTransform) {
+        ctx.resetTransform();
+      } else {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+      }
+      ctx.scale(dpr, dpr);
+      initGasParticles();
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -530,7 +585,7 @@
       for (let i = 0; i < count; i++) {
         const a = Math.random() * Math.PI * 2;
         const velocity = (Math.random() * 5 + 2) * speedMult;
-        particles.push({
+        sparks.push({
           x: x,
           y: y,
           vx: Math.cos(a) * velocity,
@@ -543,17 +598,95 @@
       }
     }
 
-    function updateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
+    function updateParticles(now) {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const t = now ? now / 1000 : performance.now() / 1000;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // 1. Draw Rising Green Gas Particles (4K Game Atmospheric VFX)
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter'; // Additive blending for luminous energy glow
+
+      for (let i = 0; i < gasParticles.length; i++) {
+        const p = gasParticles[i];
+
+        // Lift upwards like hot glowing gas
+        p.y -= p.vy;
+
+        // Sinusoidal organic fluid drift
+        p.x = p.baseX + Math.sin(t * p.swayFreq + p.swayPhase) * p.swayAmp;
+
+        // Progress from ground (0.0) to ceiling at 60% height (1.0)
+        const totalDist = p.groundY - p.ceilingY;
+        const currentDist = p.groundY - p.y;
+        const progress = Math.min(1.0, Math.max(0, currentDist / totalDist));
+
+        // Smooth fade curve:
+        // - In bottom 15%: fade in from 0 to full alpha
+        // - Middle 15%-65%: sustain with subtle organic breathing pulse
+        // - Upper 65%-100%: smooth fade-out to 0 at exactly 60% height
+        let alpha = p.baseAlpha;
+        if (progress <= 0.15) {
+          alpha = p.baseAlpha * (progress / 0.15);
+        } else if (progress > 0.65) {
+          const fadeProgress = (1.0 - progress) / 0.35;
+          alpha = p.baseAlpha * Math.max(0, fadeProgress * fadeProgress);
+        } else {
+          alpha = p.baseAlpha * (1 + 0.14 * Math.sin(t * p.pulseSpeed));
+        }
+
+        // If reached 60% ceiling or faded out, respawn gracefully at ground
+        if (progress >= 1.0 || p.y <= p.ceilingY) {
+          Object.assign(p, createGasParticle(false));
+          continue;
+        }
+
+        if (alpha <= 0.01) continue;
+
+        // Color selection
+        let rColor, gColor, bColor;
+        if (p.colorType === 0) {
+          // Official EDOCODE Neon Green #25D366
+          rColor = 37; gColor = 211; bColor = 102;
+        } else if (p.colorType === 1) {
+          // Electric Mint #34D399
+          rColor = 52; gColor = 211; bColor = 153;
+        } else {
+          // Deep Emerald Jade #10B981
+          rColor = 16; gColor = 185; bColor = 129;
+        }
+
+        ctx.shadowColor = `rgba(${rColor}, ${gColor}, ${bColor}, ${Math.min(1, alpha * 1.2)})`;
+        ctx.shadowBlur = p.radius * 3.8;
+        ctx.fillStyle = `rgba(${rColor}, ${gColor}, ${bColor}, ${alpha.toFixed(3)})`;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // High-end inner core for larger embers
+        if (p.radius > 2.8) {
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = `rgba(255, 255, 255, ${(alpha * 0.7).toFixed(3)})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius * 0.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+
+      // 2. Draw Click Sparks
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const p = sparks[i];
         p.x += p.vx;
         p.y += p.vy;
         p.alpha -= p.decay;
         p.size *= 0.96;
 
         if (p.alpha <= 0 || p.size < 0.4) {
-          particles.splice(i, 1);
+          sparks.splice(i, 1);
           continue;
         }
 
@@ -706,7 +839,7 @@
       }
 
       updateAudioWhir(currentSpeed);
-      updateParticles();
+      updateParticles(now);
 
       requestAnimationFrame(tick);
     }
