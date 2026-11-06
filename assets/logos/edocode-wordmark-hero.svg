@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1000" width="2400" height="1000">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 280 2120 480" width="2120" height="480">
   <rect width="2400" height="1000" fill="#000000"/>
   
   <g opacity="0.04">
@@ -6,13 +6,6 @@
     <line x1="0" y1="0" x2="0" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="80" y1="0" x2="80" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="160" y1="0" x2="160" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="240" y1="0" x2="240" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="320" y1="0" x2="320" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="400" y1="0" x2="400" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="480" y1="0" x2="480" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="560" y1="0" x2="560" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="640" y1="0" x2="640" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="720" y1="0" x2="720" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="800" y1="0" x2="800" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="880" y1="0" x2="880" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="960" y1="0" x2="960" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1040" y1="0" x2="1040" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1120" y1="0" x2="1120" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1200" y1="0" x2="1200" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1280" y1="0" x2="1280" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1360" y1="0" x2="1360" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1440" y1="0" x2="1440" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1520" y1="0" x2="1520" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1600" y1="0" x2="1600" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1680" y1="0" x2="1680" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1760" y1="0" x2="1760" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1840" y1="0" x2="1840" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1920" y1="0" x2="1920" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2000" y1="0" x2="2000" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2080" y1="0" x2="2080" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2160" y1="0" x2="2160" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2240" y1="0" x2="2240" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2320" y1="0" x2="2320" y2="2400" stroke="#FFFFFF" stroke-width="1"/>
   </g>
 
-  <!-- Tagline Top -->
-  <text x="1200.0" y="110" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#25D366" text-anchor="middle" letter-spacing="4">
-    EDOCODE MASTER WORDMARK • FINAL SPECIFICATION
-  </text>
-  <text x="1200.0" y="150" font-family="Inter, sans-serif" font-size="18" fill="#9CA3AF" text-anchor="middle">
-    All 3 Lines of E Exactly Even Length • Inner Spaces in D &amp; O • 80px Green Line Over "CODE"
-  </text>
 
   <!-- Wordmark -->
   <g transform="translate(220.0, 434.78260869565213) scale(0.8521739130434782)">
@@ -192,8 +185,4 @@ Z
 " fill="#25D366"/>
   </g>
 
-  <!-- Bottom Annotation -->
-  <text x="1200.0" y="930" font-family="JetBrains Mono, monospace" font-size="13" fill="#6B7280" text-anchor="middle" letter-spacing="2">
-    STROKE: 80PX | D &amp; O COUNTERS: OPEN | E BARS: 3x EVEN 260PX | AIR-GAP: 40PX | #25D366 &amp; #000000
-  </text>
 </svg>

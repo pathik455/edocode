@@ -657,9 +657,9 @@
       }
 
       // Smooth hydraulic wing docking animation:
-      // When stopped: targetOffset = 0 (tight 40px gap)
-      // When spinning: targetOffset = 80 (clearance gap for rotation)
-      const targetOffset = isStopped ? 0 : 80;
+      // When stopped or aligning: targetOffset = 0 (docked tight: 40px kerning gap)
+      // When spinning: targetOffset = 80 (expanded for diagonal clearance)
+      const targetOffset = (isStopped || isAligning) ? 0 : 80;
       wingOffset += (targetOffset - wingOffset) * Math.min(1, delta * 7);
 
       // Apply wing offsets
