@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1000" width="2400" height="1000">
+  <rect width="2400" height="1000" fill="#000000"/>
+  
+  <g opacity="0.04">
+    <line x1="0" y1="0" x2="2400" y2="0" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="80" x2="2400" y2="80" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="160" x2="2400" y2="160" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="240" x2="2400" y2="240" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="320" x2="2400" y2="320" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="400" x2="2400" y2="400" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="480" x2="2400" y2="480" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="560" x2="2400" y2="560" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="640" x2="2400" y2="640" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="720" x2="2400" y2="720" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="800" x2="2400" y2="800" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="880" x2="2400" y2="880" stroke="#FFFFFF" stroke-width="1"/><line x1="0" y1="960" x2="2400" y2="960" stroke="#FFFFFF" stroke-width="1"/>
+    <line x1="0" y1="0" x2="0" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="80" y1="0" x2="80" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="160" y1="0" x2="160" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="240" y1="0" x2="240" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="320" y1="0" x2="320" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="400" y1="0" x2="400" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="480" y1="0" x2="480" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="560" y1="0" x2="560" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="640" y1="0" x2="640" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="720" y1="0" x2="720" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="800" y1="0" x2="800" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="880" y1="0" x2="880" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="960" y1="0" x2="960" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1040" y1="0" x2="1040" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1120" y1="0" x2="1120" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1200" y1="0" x2="1200" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1280" y1="0" x2="1280" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1360" y1="0" x2="1360" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1440" y1="0" x2="1440" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1520" y1="0" x2="1520" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1600" y1="0" x2="1600" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1680" y1="0" x2="1680" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1760" y1="0" x2="1760" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1840" y1="0" x2="1840" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="1920" y1="0" x2="1920" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2000" y1="0" x2="2000" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2080" y1="0" x2="2080" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2160" y1="0" x2="2160" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2240" y1="0" x2="2240" y2="2400" stroke="#FFFFFF" stroke-width="1"/><line x1="2320" y1="0" x2="2320" y2="2400" stroke="#FFFFFF" stroke-width="1"/>
+  </g>
+
+  <!-- Tagline Top -->
+  <text x="1200.0" y="110" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#25D366" text-anchor="middle" letter-spacing="4">
+    EDOCODE MASTER WORDMARK • FINAL SPECIFICATION
+  </text>
+  <text x="1200.0" y="150" font-family="Inter, sans-serif" font-size="18" fill="#9CA3AF" text-anchor="middle">
+    All 3 Lines of E Exactly Even Length • Inner Spaces in D &amp; O • 80px Green Line Over "CODE"
+  </text>
+
+  <!-- Wordmark -->
+  <g transform="translate(220.0, 434.78260869565213) scale(0.8521739130434782)">
+    <path d="
+    M 0 20 
+    A 20 20 0 0 1 20 0 
+    L 244 0 
+    A 16 16 0 0 1 260 16 
+    L 260 64 
+    A 16 16 0 0 1 244 80 
+    L 88 80 
+    A 8 8 0 0 0 80 88 
+    L 80 112 
+    A 8 8 0 0 0 88 120 
+    L 244 120 
+    A 16 16 0 0 1 260 136 
+    L 260 184 
+    A 16 16 0 0 1 244 200 
+    L 88 200 
+    A 8 8 0 0 0 80 208 
+    L 80 232 
+    A 8 8 0 0 0 88 240 
+    L 244 240 
+    A 16 16 0 0 1 260 256 
+    L 260 304 
+    A 16 16 0 0 1 244 320 
+    L 20 320 
+    A 20 20 0 0 1 0 300 
+    Z
+    " fill="#FFFFFF" transform="translate(0, 0)"/>
+<path d="
+    M 0 20 
+    A 20 20 0 0 1 20 0 
+    L 160 0 
+    A 120 120 0 0 1 280 120 
+    L 280 200 
+    A 120 120 0 0 1 160 320 
+    L 20 320 
+    A 20 20 0 0 1 0 300 
+    Z 
+    M 88 80 
+    L 160 80 
+    A 40 40 0 0 1 200 120 
+    L 200 200 
+    A 40 40 0 0 1 160 240 
+    L 88 240 
+    A 8 8 0 0 1 80 232 
+    L 80 88 
+    A 8 8 0 0 1 88 80 
+    Z
+    " fill="#FFFFFF" fill-rule="evenodd" transform="translate(300, 0)"/>
+<path d="
+    M 60 0 
+    L 230 0 
+    A 60 60 0 0 1 290 60 
+    L 290 260 
+    A 60 60 0 0 1 230 320 
+    L 60 320 
+    A 60 60 0 0 1 0 260 
+    L 0 60 
+    A 60 60 0 0 1 60 0 
+    Z 
+    M 96 80 
+    L 194 80 
+    A 16 16 0 0 1 210 96 
+    L 210 224 
+    A 16 16 0 0 1 194 240 
+    L 96 240 
+    A 16 16 0 0 1 80 224 
+    L 80 96 
+    A 16 16 0 0 1 96 80 
+    Z
+    " fill="#FFFFFF" fill-rule="evenodd" transform="translate(620, 0)"/>
+<path d="
+    M 0 20 
+    A 20 20 0 0 1 20 0 
+    L 264 0 
+    A 16 16 0 0 1 280 16 
+    L 280 64 
+    A 16 16 0 0 1 264 80 
+    L 88 80 
+    A 8 8 0 0 0 80 88 
+    L 80 232 
+    A 8 8 0 0 0 88 240 
+    L 264 240 
+    A 16 16 0 0 1 280 256 
+    L 280 304 
+    A 16 16 0 0 1 264 320 
+    L 20 320 
+    A 20 20 0 0 1 0 300 
+    Z
+    " fill="#FFFFFF" transform="translate(1070, 0)"/>
+<path d="
+    M 60 0 
+    L 230 0 
+    A 60 60 0 0 1 290 60 
+    L 290 260 
+    A 60 60 0 0 1 230 320 
+    L 60 320 
+    A 60 60 0 0 1 0 260 
+    L 0 60 
+    A 60 60 0 0 1 60 0 
+    Z 
+    M 96 80 
+    L 194 80 
+    A 16 16 0 0 1 210 96 
+    L 210 224 
+    A 16 16 0 0 1 194 240 
+    L 96 240 
+    A 16 16 0 0 1 80 224 
+    L 80 96 
+    A 16 16 0 0 1 96 80 
+    Z
+    " fill="#FFFFFF" fill-rule="evenodd" transform="translate(1390, 0)"/>
+<path d="
+    M 0 20 
+    A 20 20 0 0 1 20 0 
+    L 160 0 
+    A 120 120 0 0 1 280 120 
+    L 280 200 
+    A 120 120 0 0 1 160 320 
+    L 20 320 
+    A 20 20 0 0 1 0 300 
+    Z 
+    M 88 80 
+    L 160 80 
+    A 40 40 0 0 1 200 120 
+    L 200 200 
+    A 40 40 0 0 1 160 240 
+    L 88 240 
+    A 8 8 0 0 1 80 232 
+    L 80 88 
+    A 8 8 0 0 1 88 80 
+    Z
+    " fill="#FFFFFF" fill-rule="evenodd" transform="translate(1720, 0)"/>
+<path d="
+    M 0 20 
+    A 20 20 0 0 1 20 0 
+    L 244 0 
+    A 16 16 0 0 1 260 16 
+    L 260 64 
+    A 16 16 0 0 1 244 80 
+    L 88 80 
+    A 8 8 0 0 0 80 88 
+    L 80 112 
+    A 8 8 0 0 0 88 120 
+    L 244 120 
+    A 16 16 0 0 1 260 136 
+    L 260 184 
+    A 16 16 0 0 1 244 200 
+    L 88 200 
+    A 8 8 0 0 0 80 208 
+    L 80 232 
+    A 8 8 0 0 0 88 240 
+    L 244 240 
+    A 16 16 0 0 1 260 256 
+    L 260 304 
+    A 16 16 0 0 1 244 320 
+    L 20 320 
+    A 20 20 0 0 1 0 300 
+    Z
+    " fill="#FFFFFF" transform="translate(2040, 0)"/>
+<path d="
+M 950 -100 
+A 20 20 0 0 1 970 -120 
+L 2284 -120 
+A 16 16 0 0 1 2300 -104 
+L 2300 -56 
+A 16 16 0 0 1 2284 -40 
+L 1038 -40 
+A 8 8 0 0 0 1030 -32 
+L 1030 304 
+A 16 16 0 0 1 1014 320 
+L 966 320 
+A 16 16 0 0 1 950 304 
+Z
+" fill="#25D366"/>
+  </g>
+
+  <!-- Bottom Annotation -->
+  <text x="1200.0" y="930" font-family="JetBrains Mono, monospace" font-size="13" fill="#6B7280" text-anchor="middle" letter-spacing="2">
+    STROKE: 80PX | D &amp; O COUNTERS: OPEN | E BARS: 3x EVEN 260PX | AIR-GAP: 40PX | #25D366 &amp; #000000
+  </text>
+</svg>
