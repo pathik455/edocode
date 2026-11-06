@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EDOCODE • Interactive Fidget Spinner</title>
+  <meta name="description" content="EDOCODE interactive logo experience — Palindromic rotation at 2s/rot with realistic fidget spinner physics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --green: #25D366;
+      --green-glow: rgba(37, 211, 102, 0.45);
+      --green-subtle: rgba(37, 211, 102, 0.12);
+      --white: #FFFFFF;
+      --gray-400: #888888;
+      --gray-700: #262626;
+      --gray-800: #171717;
+      --gray-900: #0a0a0a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      cursor: crosshair;
+    }
+
+    /* Ambient background grid & radial glow */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(37, 211, 102, 0.09) 0%, transparent 65%),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Particle canvas for motion trails and sparks */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Header */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 24px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-tag {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .brand-tag svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand-tag .title {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.12em;
+      color: var(--white);
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--gray-400);
+      backdrop-filter: blur(12px);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse-dot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+
+    /* Main Stage */
+    main {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .spinner-wrapper {
+      position: relative;
+      width: min(880px, 92vw);
+      height: min(440px, 50vh);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    /* Outer bearing rings */
+    .bearing-ring {
+      position: absolute;
+      width: min(440px, 75vw);
+      height: min(440px, 75vw);
+      border-radius: 50%;
+      border: 1px dashed rgba(37, 211, 102, 0.22);
+      pointer-events: none;
+      animation: ring-pulse 6s infinite linear;
+    }
+
+    .bearing-ring.outer {
+      width: min(580px, 92vw);
+      height: min(580px, 92vw);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      animation: ring-reverse 10s infinite linear;
+    }
+
+    @keyframes ring-pulse {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes ring-reverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    /* SVG Stage */
+    .spinner-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.9));
+      transition: filter 0.15s ease-out;
+    }
+
+    .spinner-svg.hyperspin {
+      filter: drop-shadow(0 0 50px var(--green-glow)) drop-shadow(0 20px 60px rgba(0, 0, 0, 0.95));
+    }
+
+    /* Instruction Badge & Speedometer */
+    .instruction-hud {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .instruction-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(37, 211, 102, 0.08);
+      border: 1px solid var(--green);
+      box-shadow: 0 0 25px var(--green-subtle);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      transition: all 0.2s ease;
+      animation: badge-pulse 2s infinite ease-in-out;
+    }
+
+    .instruction-badge .icon {
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    @keyframes badge-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(37, 211, 102, 0.2); }
+      50% { transform: scale(1.03); box-shadow: 0 0 35px rgba(37, 211, 102, 0.45); }
+    }
+
+    /* Speedometer Bar */
+    .speedo-bar-container {
+      width: 320px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .speedo-bar-fill {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(90deg, var(--green), #00ff88);
+      box-shadow: 0 0 12px var(--green);
+      border-radius: 999px;
+      transition: width 0.1s ease-out;
+    }
+
+    /* Floating Cursor Tooltip */
+    .cursor-pill {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.92);
+      border: 1px solid var(--green);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 25px var(--green-glow);
+      backdrop-filter: blur(16px);
+      padding: 8px 16px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+      transition: opacity 0.2s ease;
+      opacity: 0;
+      transform: translate(-50%, -140%);
+    }
+
+    .cursor-pill.visible {
+      opacity: 1;
+    }
+
+    .cursor-pill .icon {
+      font-size: 14px;
+      display: inline-block;
+      animation: spin-icon 1.2s infinite linear;
+    }
+
+    @keyframes spin-icon {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .cursor-pill .text {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .cursor-pill .highlight {
+      color: var(--green);
+    }
+
+    /* Footer & Metrics */
+    footer {
+      position: relative;
+      z-index: 10;
+      padding: 24px 36px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hud-metrics {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 130px;
+      backdrop-filter: blur(8px);
+    }
+
+    .metric-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--gray-400);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .metric-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .metric-val.green {
+      color: var(--green);
+      text-shadow: 0 0 12px var(--green-glow);
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--white);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 9px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: rgba(37, 211, 102, 0.15);
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: 0 0 15px var(--green-glow);
+    }
+
+    .btn.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: #000000;
+      font-weight: 800;
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      header {
+        padding: 16px 20px;
+      }
+      footer {
+        padding: 16px 20px 24px;
+      }
+      .hud-metrics {
+        gap: 10px;
+      }
+      .metric-card {
+        min-width: 90px;
+        padding: 8px 10px;
+      }
+      .metric-val {
+        font-size: 15px;
+      }
+      .cursor-pill {
+        display: none;
+      }
+      .speedo-bar-container {
+        width: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Grid & Ambience -->
+  <div class="bg-grid"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Navigation Header -->
+  <header>
+    <a href="https://edocode.co.in" class="brand-tag" title="EDOCODE Systems">
+      <svg viewBox="0 0 320 320" fill="none">
+        <path d="M 0 20 A 20 20 0 0 1 20 0 L 300 0 A 20 20 0 0 1 320 20 L 320 70 A 20 20 0 0 1 300 90 L 110 90 A 20 20 0 0 0 90 110 L 90 300 A 20 20 0 0 1 70 320 L 20 320 A 20 20 0 0 1 0 300 Z" fill="#25D366"/>
+        <path d="M 120 120 A 10 10 0 0 1 130 110 L 290 110 A 10 10 0 0 1 300 120 L 300 150 A 10 10 0 0 1 290 160 L 180 160 A 10 10 0 0 0 170 170 L 170 200 A 10 10 0 0 0 180 210 L 270 210 A 10 10 0 0 1 280 220 L 280 240 A 10 10 0 0 1 270 250 L 180 250 A 10 10 0 0 0 170 260 L 170 270 A 10 10 0 0 0 180 280 L 290 280 A 10 10 0 0 1 300 290 L 300 310 A 10 10 0 0 1 290 320 L 130 320 A 10 10 0 0 1 120 310 Z" fill="#FFFFFF"/>
+      </svg>
+      <span class="title">EDOCODE</span>
+    </a>
+
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      <span>SYSTEM ACTIVE • edocode.co.in</span>
+    </div>
+  </header>
+
+  <!-- Center Stage Interactive Spinner -->
+  <main>
+    <div class="spinner-wrapper" id="spinner-container" title="Click to spin like a fidget spinner!">
+      <div class="bearing-ring outer"></div>
+      <div class="bearing-ring"></div>
+
+      <!-- Master SVG Logo Stage (viewBox matches full wordmark geometry) -->
+      <svg class="spinner-svg" id="spinner-svg" viewBox="0 0 2460 560">
+        <defs>
+          <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#25D366" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#25D366" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Center Glowing Aura -->
+        <circle cx="1230" cy="280" r="220" fill="url(#hubGlow)"/>
+
+        <!-- Master Rotating Assembly (Rotates around exact centroid: 1230, 280) -->
+        <g id="spinner-rotor" transform="translate(1230, 280) rotate(0)">
+          
+          <!-- Offset back to wordmark root -->
+          <g transform="translate(-1230, -280)">
+            <g transform="translate(80, 180)">
+              
+              <!-- LEFT WING: E D O -->
+              <g id="wing-edo">
+                <!-- E -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
+                " fill="#FFFFFF" transform="translate(0, 0)"/>
+                
+                <!-- D -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
+                  M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(300, 0)"/>
+
+                <!-- O -->
+                <path d="
+                  M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
+                  M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(620, 0)"/>
+              </g>
+
+              <!-- CENTER FEATURE: C -->
+              <g id="center-c">
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 264 0 A 16 16 0 0 1 280 16 L 280 64 A 16 16 0 0 1 264 80 L 88 80 A 8 8 0 0 0 80 88 L 80 232 A 8 8 0 0 0 88 240 L 264 240 A 16 16 0 0 1 280 256 L 280 304 A 16 16 0 0 1 264 320 L 20 320 A 20 20 0 0 1 0 300 Z
+                " fill="#FFFFFF" transform="translate(1070, 0)"/>
+              </g>
+
+              <!-- RIGHT WING: O D E + GREEN SNAKE OVERLINE -->
+              <g id="wing-ode">
+                <!-- O -->
+                <path d="
+                  M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
+                  M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(1390, 0)"/>
+
+                <!-- D -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
+                  M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(1720, 0)"/>
+
+                <!-- E -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
+                " fill="#FFFFFF" transform="translate(2040, 0)"/>
+
+                <!-- Green Snake Overline extending over CODE -->
+                <path d="
+                  M 950 -100 A 20 20 0 0 1 970 -120 L 2284 -120 A 16 16 0 0 1 2300 -104 L 2300 -56 A 16 16 0 0 1 2284 -40 L 1038 -40 A 8 8 0 0 0 1030 -32 L 1030 304 A 16 16 0 0 1 1014 320 L 966 320 A 16 16 0 0 1 950 304 Z
+                " fill="#25D366"/>
+              </g>
+
+            </g>
+          </g>
+        </g>
+
+        <!-- Center Stationary / Floating Mini Logo Bearing Badge (at exact center 1230, 280) -->
+        <g id="center-mini-mark" transform="translate(1230, 280)" style="display: none;">
+          <circle r="96" fill="#000000" stroke="#25D366" stroke-width="4"/>
+          <g transform="translate(-48, -48) scale(0.3)">
+            <path d="M 0 20 A 20 20 0 0 1 20 0 L 300 0 A 20 20 0 0 1 320 20 L 320 70 A 20 20 0 0 1 300 90 L 110 90 A 20 20 0 0 0 90 110 L 90 300 A 20 20 0 0 1 70 320 L 20 320 A 20 20 0 0 1 0 300 Z" fill="#25D366"/>
+            <path d="M 120 120 A 10 10 0 0 1 130 110 L 290 110 A 10 10 0 0 1 300 120 L 300 150 A 10 10 0 0 1 290 160 L 180 160 A 10 10 0 0 0 170 170 L 170 200 A 10 10 0 0 0 180 210 L 270 210 A 10 10 0 0 1 280 220 L 280 240 A 10 10 0 0 1 270 250 L 180 250 A 10 10 0 0 0 170 260 L 170 270 A 10 10 0 0 0 180 280 L 290 280 A 10 10 0 0 1 300 290 L 300 310 A 10 10 0 0 1 290 320 L 130 320 A 10 10 0 0 1 120 310 Z" fill="#FFFFFF"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Prominent Instruction Badge & Speedometer Gauge -->
+    <div class="instruction-hud" id="instruction-hud">
+      <div class="instruction-badge">
+        <span class="icon">🌀</span>
+        <span>CLICK ON LOGO TO SPIN FASTER LIKE A FIDGET SPINNER</span>
+      </div>
+      <div class="speedo-bar-container">
+        <div class="speedo-bar-fill" id="speedo-fill"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Dynamic Cursor Tooltip -->
+  <div class="cursor-pill" id="cursor-pill">
+    <span class="icon">🌀</span>
+    <span class="text">CLICK TO SPIN <span class="highlight">FASTER</span> (<span id="cursor-rpm">30 RPM</span>)</span>
+  </div>
+
+  <!-- Bottom HUD Metrics & Control Bar -->
+  <footer>
+    <div class="hud-metrics">
+      <div class="metric-card">
+        <span class="metric-label">Rotational Speed</span>
+        <span class="metric-val green" id="metric-rpm">30 RPM</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Period</span>
+        <span class="metric-val" id="metric-period">2.00 s/rot</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Total Clicks</span>
+        <span class="metric-val" id="metric-clicks">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Max Speed</span>
+        <span class="metric-val" id="metric-max">30 RPM</span>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <button class="btn active" id="btn-mode">MODE: FULL WORDMARK</button>
+      <button class="btn" id="btn-boost">⚡ SUPER BOOST (+500 RPM)</button>
+      <button class="btn" id="btn-sound">🔊 SOUND: ON</button>
+      <button class="btn" id="btn-reset">↺ CRUISE (2s)</button>
+      <a href="https://edocode.co.in" class="btn">EDOCODE.CO.IN →</a>
+    </div>
+  </footer>
+
+  <script>
+    // --- Physics & Rotation State ---
+    const BASE_SPEED = 180; // 180 deg/s = exactly 360 deg every 2.00s (30 RPM)
+    let currentSpeed = BASE_SPEED;
+    let targetSpeed = BASE_SPEED;
+    let angle = 0;
+    let totalClicks = 0;
+    let maxSpeed = BASE_SPEED;
+    let soundEnabled = true;
+    let spinnerMode = 0; // 0: Full Wordmark, 1: Center Mark with Dual-Wing Fidget
+
+    const rotor = document.getElementById('spinner-rotor');
+    const centerMiniMark = document.getElementById('center-mini-mark');
+    const centerC = document.getElementById('center-c');
+    const svgElement = document.getElementById('spinner-svg');
+    const container = document.getElementById('spinner-container');
+    const instructionHud = document.getElementById('instruction-hud');
+    const cursorPill = document.getElementById('cursor-pill');
+    const cursorRpm = document.getElementById('cursor-rpm');
+    const speedoFill = document.getElementById('speedo-fill');
+    
+    // HUD Metrics
+    const metricRpm = document.getElementById('metric-rpm');
+    const metricPeriod = document.getElementById('metric-period');
+    const metricClicks = document.getElementById('metric-clicks');
+    const metricMax = document.getElementById('metric-max');
+    const btnMode = document.getElementById('btn-mode');
+    const btnBoost = document.getElementById('btn-boost');
+    const btnSound = document.getElementById('btn-sound');
+    const btnReset = document.getElementById('btn-reset');
+
+    // --- Web Audio API Synthesizer (Realistic Ceramic Bearing Whir) ---
+    let audioCtx = null;
+    let whirOsc = null;
+    let whirGain = null;
+
+    function initAudio() {
+      if (audioCtx) return;
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        
+        whirOsc = audioCtx.createOscillator();
+        whirOsc.type = 'triangle';
+        whirOsc.frequency.setValueAtTime(60, audioCtx.currentTime);
+
+        whirGain = audioCtx.createGain();
+        whirGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+
+        whirOsc.connect(whirGain);
+        whirGain.connect(audioCtx.destination);
+        whirOsc.start();
+      } catch (e) {
+        console.warn('Audio not available');
+      }
+    }
+
+    function playClickPop(pitchMult = 1.0) {
+      if (!soundEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+
+      try {
+        const popOsc = audioCtx.createOscillator();
+        const popGain = audioCtx.createGain();
+
+        popOsc.type = 'sine';
+        const startFreq = 340 * pitchMult;
+        popOsc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
+        popOsc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.1);
+
+        popGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        popGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+
+        popOsc.connect(popGain);
+        popGain.connect(audioCtx.destination);
+
+        popOsc.start();
+        popOsc.stop(audioCtx.currentTime + 0.11);
+      } catch (e) {}
+    }
+
+    function updateAudioWhir(speed) {
+      if (!soundEnabled || !whirGain || !whirOsc || !audioCtx) return;
+      const rpm = (speed / 360) * 60;
+      const targetFreq = Math.min(850, 70 + rpm * 0.4);
+      const targetVol = Math.min(0.07, Math.max(0.001, (rpm - 30) * 0.00012));
+
+      whirOsc.frequency.setTargetAtTime(targetFreq, audioCtx.currentTime, 0.1);
+      whirGain.gain.setTargetAtTime(targetVol, audioCtx.currentTime, 0.1);
+    }
+
+    // --- Particle Spark System ---
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function spawnSparks(x, y, count = 14, speedMult = 1) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = (Math.random() * 5 + 2) * speedMult;
+        particles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity,
+          size: Math.random() * 3 + 1.5,
+          alpha: 1.0,
+          decay: Math.random() * 0.03 + 0.02,
+          color: Math.random() > 0.35 ? '#25D366' : '#FFFFFF'
+        });
+      }
+    }
+
+    function updateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= p.decay;
+        p.size *= 0.96;
+
+        if (p.alpha <= 0 || p.size < 0.4) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // --- Interaction / Fidget Spinner Accelerate ---
+    function accelerate(boostAmount = 380, clientX = null, clientY = null) {
+      totalClicks++;
+      metricClicks.textContent = totalClicks;
+
+      targetSpeed += boostAmount;
+      if (targetSpeed > 12000) targetSpeed = 12000;
+
+      const rpm = (targetSpeed / 360) * 60;
+      playClickPop(Math.min(2.5, 1.0 + rpm / 400));
+
+      const rect = svgElement.getBoundingClientRect();
+      const sparkX = clientX !== null ? clientX : (rect.left + rect.width / 2);
+      const sparkY = clientY !== null ? clientY : (rect.top + rect.height / 2);
+      spawnSparks(sparkX, sparkY, Math.min(26, 10 + Math.floor(rpm / 50)), Math.min(3.5, 1 + rpm / 250));
+
+      // Visual punch effect
+      svgElement.style.transform = 'scale(1.025)';
+      setTimeout(() => { svgElement.style.transform = 'scale(1)'; }, 90);
+    }
+
+    container.addEventListener('pointerdown', (e) => {
+      accelerate(420, e.clientX, e.clientY);
+    });
+
+    instructionHud.addEventListener('pointerdown', (e) => {
+      accelerate(420, e.clientX, e.clientY);
+    });
+
+    btnBoost.addEventListener('click', () => {
+      accelerate(3000);
+    });
+
+    btnReset.addEventListener('click', () => {
+      targetSpeed = BASE_SPEED;
+      currentSpeed = BASE_SPEED;
+    });
+
+    btnSound.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      btnSound.textContent = soundEnabled ? '🔊 SOUND: ON' : '🔇 SOUND: OFF';
+      btnSound.classList.toggle('active', soundEnabled);
+      if (!soundEnabled && whirGain && audioCtx) {
+        whirGain.gain.setTargetAtTime(0.001, audioCtx.currentTime, 0.05);
+      }
+    });
+
+    btnMode.addEventListener('click', () => {
+      spinnerMode = (spinnerMode + 1) % 2;
+      if (spinnerMode === 0) {
+        btnMode.textContent = 'MODE: FULL WORDMARK';
+        centerMiniMark.style.display = 'none';
+        centerC.style.display = 'block';
+      } else {
+        btnMode.textContent = 'MODE: MINI-HUB SPINNER';
+        centerMiniMark.style.display = 'block';
+        centerC.style.display = 'none';
+      }
+    });
+
+    // --- Dynamic Cursor Instruction Tooltip ---
+    let mouseX = -200, mouseY = -200;
+    window.addEventListener('pointermove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorPill.style.transform = `translate(${mouseX + 16}px, ${mouseY - 48}px)`;
+      cursorPill.classList.add('visible');
+    });
+
+    document.addEventListener('pointerleave', () => {
+      cursorPill.classList.remove('visible');
+    });
+
+    // --- Main Physics Loop (requestAnimationFrame) ---
+    let lastTime = performance.now();
+
+    function tick(now) {
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
+      // Realistic skateboard ceramic bearing damping towards BASE_SPEED (30 RPM)
+      if (targetSpeed > BASE_SPEED) {
+        const friction = Math.max(0.982, 1 - (delta * 0.45));
+        targetSpeed = BASE_SPEED + (targetSpeed - BASE_SPEED) * friction;
+      }
+
+      currentSpeed += (targetSpeed - currentSpeed) * Math.min(1, delta * 14);
+
+      // Rotate around exact centroid (1230, 280)
+      angle = (angle + currentSpeed * delta) % 360;
+      rotor.setAttribute('transform', `translate(1230, 280) rotate(${angle.toFixed(2)})`);
+
+      const rpm = Math.round((currentSpeed / 360) * 60);
+      const period = (360 / currentSpeed).toFixed(2);
+      
+      metricRpm.textContent = `${rpm.toLocaleString()} RPM`;
+      metricPeriod.textContent = `${period} s/rot`;
+      cursorRpm.textContent = `${rpm.toLocaleString()} RPM`;
+
+      if (rpm > maxSpeed) {
+        maxSpeed = rpm;
+        metricMax.textContent = `${maxSpeed.toLocaleString()} RPM`;
+      }
+
+      // Speedometer bar fill percentage (30 RPM = 5%, 1000 RPM = 100%)
+      const fillPct = Math.min(100, Math.max(5, (rpm / 1000) * 100));
+      speedoFill.style.width = `${fillPct}%`;
+
+      // Hyperspin glow
+      if (rpm > 280) {
+        svgElement.classList.add('hyperspin');
+      } else {
+        svgElement.classList.remove('hyperspin');
+      }
+
+      // Cursor message dynamics
+      if (rpm >= 800) {
+        cursorPill.querySelector('.text').innerHTML = `⚡ <span class="highlight">SUPERSONIC SPINNER!</span> (${rpm} RPM)`;
+      } else if (rpm >= 240) {
+        cursorPill.querySelector('.text').innerHTML = `🔥 <span class="highlight">SPINNING FAST!</span> (${rpm} RPM)`;
+      } else {
+        cursorPill.querySelector('.text').innerHTML = `CLICK TO SPIN <span class="highlight">FASTER</span> (${rpm} RPM)`;
+      }
+
+      // Sound & Sparks
+      updateAudioWhir(currentSpeed);
+      updateParticles();
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>
