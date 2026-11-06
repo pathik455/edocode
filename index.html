@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>EDOCODE • Palindromic Fidget Spinner</title>
+  <title>EDOCODE • AI Brand building company</title>
   <meta name="description" content="EDOCODE — Static brand mark with spinning palindromic EDO and ODE wings.">
   <link rel="icon" type="image/svg+xml" href="assets/logos/edocode-favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -179,6 +179,13 @@
       box-sizing: border-box;
     }
 
+    .center-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
     /* Square Responsive Spinner Stage: Sized to fit BOTH width and height */
     .spinner-wrapper {
       position: relative;
@@ -310,11 +317,12 @@
       }
       header {
         position: relative;
-        padding: 16px 20px 0;
+        padding: 14px 20px 0;
         flex-direction: column;
         align-items: center;
         gap: 0px;
         z-index: 25;
+        flex-shrink: 0;
       }
       .brand-tag {
         align-self: flex-start;
@@ -322,8 +330,8 @@
       .top-instruction {
         position: static;
         transform: none;
-        margin-top: 20px; /* Positioned lower from the logo for balanced mobile hierarchy */
-        padding: 7px 16px;
+        margin-top: 14px; /* Positioned lower from the logo for balanced mobile hierarchy */
+        padding: 6px 14px;
         gap: 8px;
         max-width: calc(100vw - 32px);
       }
@@ -332,20 +340,29 @@
         letter-spacing: 0.08em;
       }
       .brand-hero-logo {
-        height: 24px;
-        max-width: 130px;
+        height: 22px;
+        max-width: 125px;
       }
       main {
-        min-height: auto;
+        min-height: calc(100dvh - 84px);
         height: auto;
-        padding: 24px 16px 40px;
+        padding: 8px 16px max(20px, env(safe-area-inset-bottom, 20px));
+        gap: 16px;
+        justify-content: space-between;
+        box-sizing: border-box;
+      }
+      .center-stage {
+        margin: auto 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         gap: 20px;
-        justify-content: flex-start;
+        width: 100%;
       }
       .spinner-wrapper {
-        width: min(84vw, 360px);
-        height: min(84vw, 360px);
-        margin: 8px 0;
+        width: min(78vw, 300px);
+        height: min(78vw, 300px);
+        margin: 0;
         touch-action: pan-y; /* Allows vertical scrolling when dragging over spinner */
       }
       .btn-rect {
@@ -358,12 +375,14 @@
         left: auto;
         transform: none;
         width: 100%;
-        margin-top: 36px;
-        margin-bottom: max(32px, env(safe-area-inset-bottom, 32px));
-        font-size: clamp(38px, 12vw, 64px);
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 4px;
+        font-size: clamp(32px, 10.5vw, 48px);
         letter-spacing: -0.03em;
-        line-height: 0.85;
+        line-height: 0.9;
         opacity: 0.75;
+        flex-shrink: 0;
       }
     }
   </style>
@@ -390,116 +409,140 @@
 
   <!-- Main Stage: Perfectly Centered, Clean OLED Black -->
   <main>
-    <div class="spinner-wrapper" id="spinner-container">
+    <div class="center-stage">
+      <div class="spinner-wrapper" id="spinner-container">
 
-      <!-- Master SVG Stage: viewBox centered at (0, 0) with generous clearance -->
-      <svg class="spinner-svg" id="spinner-svg" viewBox="-1400 -1400 2800 2800">
+        <!-- Master SVG Stage: viewBox centered at (0, 0) with generous clearance -->
+        <svg class="spinner-svg" id="spinner-svg" viewBox="-1400 -1400 2800 2800">
 
-        <!-- ======================================================== -->
-        <!-- SPINNING ROTOR: Palindromic EDO (left) and ODE (right)   -->
-        <!-- Dynamic docking gap:                                     -->
-        <!--   - Spinning: expands outward by +80px for clearance     -->
-        <!--   - Stopped: retracts inward to tight 40px kerning gap   -->
-        <!-- ======================================================== -->
-        <g id="spinner-rotor" transform="rotate(0)">
-          
-          <!-- LEFT WING: E D O (starts at -1110, inner O ends at -200) -->
-          <g id="wing-edo" transform="translate(0, 0)">
-            <!-- Letter E (-1110 to -850) -->
-            <path d="
-              M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
-            " fill="#FFFFFF" transform="translate(-1110, -160)"/>
+          <!-- ======================================================== -->
+          <!-- SPINNING ROTOR: Palindromic EDO (left) and ODE (right)   -->
+          <!-- Dynamic docking gap:                                     -->
+          <!--   - Spinning: expands outward by +80px for clearance     -->
+          <!--   - Stopped: retracts inward to tight 40px kerning gap   -->
+          <!-- ======================================================== -->
+          <g id="spinner-rotor" transform="rotate(0)">
             
-            <!-- Letter D (-810 to -530) -->
-            <path d="
-              M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
-              M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-810, -160)"/>
+            <!-- LEFT WING: E D O (starts at -1110, inner O ends at -200) -->
+            <g id="wing-edo" transform="translate(0, 0)">
+              <!-- Letter E (-1110 to -850) -->
+              <path d="
+                M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
+              " fill="#FFFFFF" transform="translate(-1110, -160)"/>
+              
+              <!-- Letter D (-810 to -530) -->
+              <path d="
+                M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
+                M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
+              " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-810, -160)"/>
 
-            <!-- Letter O (-490 to -200) -->
-            <path d="
-              M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
-              M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-490, -160)"/>
+              <!-- Letter O (-490 to -200) -->
+              <path d="
+                M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
+                M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
+              " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-490, -160)"/>
+            </g>
+
+            <!-- RIGHT WING: Dual-state (Spelling EDOCODE when stopped, C2 rotational mirror EDO when spinning) -->
+            <g id="wing-ode" transform="translate(0, 0)">
+              <!-- Stopped State: Upright O D E spells brand name EDOCODE -->
+              <g id="wing-ode-stopped" style="opacity: 0;">
+                <!-- Letter O (+200 to +490) -->
+                <path d="
+                  M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
+                  M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(200, -160)"/>
+
+                <!-- Letter D (+530 to +810) -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
+                  M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(530, -160)"/>
+
+                <!-- Letter E (+850 to +1110) -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
+                " fill="#FFFFFF" transform="translate(850, -160)"/>
+              </g>
+
+              <!-- Spinning State: C2 Rotational mirror (O mirror D mirror E) so both wings read EDO on the left -->
+              <g id="wing-ode-spinning" transform="scale(-1, -1)" style="opacity: 1;">
+                <!-- Letter E (maps to +850 to +1110) -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
+                " fill="#FFFFFF" transform="translate(-1110, -160)"/>
+
+                <!-- Letter D (maps to +530 to +810) -->
+                <path d="
+                  M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
+                  M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-810, -160)"/>
+
+                <!-- Letter O (maps to +200 to +490) -->
+                <path d="
+                  M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
+                  M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
+                " fill="#FFFFFF" fill-rule="evenodd" transform="translate(-490, -160)"/>
+              </g>
+            </g>
           </g>
 
-          <!-- RIGHT WING: O D E (inner O starts at +200, ends at +1110) -->
-          <!-- Point reflection of E D O across (0, 0) -->
-          <g id="wing-ode" transform="translate(0, 0)">
-            <!-- Letter O (+200 to +490) -->
-            <path d="
-              M 60 0 L 230 0 A 60 60 0 0 1 290 60 L 290 260 A 60 60 0 0 1 230 320 L 60 320 A 60 60 0 0 1 0 260 L 0 60 A 60 60 0 0 1 60 0 Z 
-              M 96 80 L 194 80 A 16 16 0 0 1 210 96 L 210 224 A 16 16 0 0 1 194 240 L 96 240 A 16 16 0 0 1 80 224 L 80 96 A 16 16 0 0 1 96 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(200, -160)"/>
+          <!-- ======================================================== -->
+          <!-- STATIC CENTER LOGO: Clean, Pure OLED Black (No Circles) -->
+          <!-- Spans [-160, 160] x [-160, 160] (320x320)                -->
+          <!-- ======================================================== -->
+          <g id="static-center-logo">
+            <!-- Official Brand Kit Mark: Outer Green Bracket + Inner White C/E -->
+            <g transform="translate(-160, -160)">
+              <!-- Outer Green L-Bracket #25D366 -->
+              <path d="
+                M 0 20
+                A 20 20 0 0 1 20 0
+                L 304 0
+                A 16 16 0 0 1 320 16
+                L 320 64
+                A 16 16 0 0 1 304 80
+                L 88 80
+                A 8 8 0 0 0 80 88
+                L 80 304
+                A 16 16 0 0 1 64 320
+                L 16 320
+                A 16 16 0 0 1 0 304
+                Z
+              " fill="#25D366" />
 
-            <!-- Letter D (+530 to +810) -->
-            <path d="
-              M 0 20 A 20 20 0 0 1 20 0 L 160 0 A 120 120 0 0 1 280 120 L 280 200 A 120 120 0 0 1 160 320 L 20 320 A 20 20 0 0 1 0 300 Z 
-              M 88 80 L 160 80 A 40 40 0 0 1 200 120 L 200 200 A 40 40 0 0 1 160 240 L 88 240 A 8 8 0 0 1 80 232 L 80 88 A 8 8 0 0 1 88 80 Z
-            " fill="#FFFFFF" fill-rule="evenodd" transform="translate(530, -160)"/>
-
-            <!-- Letter E (+850 to +1110) -->
-            <path d="
-              M 0 20 A 20 20 0 0 1 20 0 L 244 0 A 16 16 0 0 1 260 16 L 260 64 A 16 16 0 0 1 244 80 L 88 80 A 8 8 0 0 0 80 88 L 80 112 A 8 8 0 0 0 88 120 L 244 120 A 16 16 0 0 1 260 136 L 260 184 A 16 16 0 0 1 244 200 L 88 200 A 8 8 0 0 0 80 208 L 80 232 A 8 8 0 0 0 88 240 L 244 240 A 16 16 0 0 1 260 256 L 260 304 A 16 16 0 0 1 244 320 L 20 320 A 20 20 0 0 1 0 300 Z
-            " fill="#FFFFFF" transform="translate(850, -160)"/>
+              <!-- Inner White Emblem #FFFFFF -->
+              <path d="
+                M 304 120
+                A 16 16 0 0 1 320 136
+                L 320 184
+                A 16 16 0 0 1 304 200
+                L 208 200
+                A 8 8 0 0 0 200 208
+                L 200 232
+                A 8 8 0 0 0 208 240
+                L 304 240
+                A 16 16 0 0 1 320 256
+                L 320 304
+                A 16 16 0 0 1 304 320
+                L 140 320
+                A 20 20 0 0 1 120 300
+                L 120 140
+                A 20 20 0 0 1 140 120
+                Z
+              " fill="#FFFFFF" />
+            </g>
           </g>
-        </g>
+        </svg>
+      </div>
 
-        <!-- ======================================================== -->
-        <!-- STATIC CENTER LOGO: Clean, Pure OLED Black (No Circles) -->
-        <!-- Spans [-160, 160] x [-160, 160] (320x320)                -->
-        <!-- ======================================================== -->
-        <g id="static-center-logo">
-          <!-- Official Brand Kit Mark: Outer Green Bracket + Inner White C/E -->
-          <g transform="translate(-160, -160)">
-            <!-- Outer Green L-Bracket #25D366 -->
-            <path d="
-              M 0 20
-              A 20 20 0 0 1 20 0
-              L 304 0
-              A 16 16 0 0 1 320 16
-              L 320 64
-              A 16 16 0 0 1 304 80
-              L 88 80
-              A 8 8 0 0 0 80 88
-              L 80 304
-              A 16 16 0 0 1 64 320
-              L 16 320
-              A 16 16 0 0 1 0 304
-              Z
-            " fill="#25D366" />
-
-            <!-- Inner White Emblem #FFFFFF -->
-            <path d="
-              M 304 120
-              A 16 16 0 0 1 320 136
-              L 320 184
-              A 16 16 0 0 1 304 200
-              L 208 200
-              A 8 8 0 0 0 200 208
-              L 200 232
-              A 8 8 0 0 0 208 240
-              L 304 240
-              A 16 16 0 0 1 320 256
-              L 320 304
-              A 16 16 0 0 1 304 320
-              L 140 320
-              A 20 20 0 0 1 120 300
-              L 120 140
-              A 20 20 0 0 1 140 120
-              Z
-            " fill="#FFFFFF" />
-          </g>
-        </g>
-      </svg>
-    </div>
-
-    <!-- Rectangular Stop & Align Button -->
-    <div class="controls-container">
-      <button class="btn-rect" id="btn-toggle-spin">
-        <span id="btn-icon">⏸</span>
-        <span id="btn-text">STOP &amp; ALIGN</span>
-      </button>
+      <!-- Rectangular Stop & Align Button -->
+      <div class="controls-container">
+        <button class="btn-rect" id="btn-toggle-spin">
+          <span id="btn-icon">⏸</span>
+          <span id="btn-text">STOP &amp; ALIGN</span>
+        </button>
+      </div>
     </div>
 
     <!-- Big Faded Web-Responsive "COMING SOON" Background Text (Reverse Fade) -->
@@ -526,6 +569,8 @@
     const rotor = document.getElementById('spinner-rotor');
     const wingEdo = document.getElementById('wing-edo');
     const wingOde = document.getElementById('wing-ode');
+    const wingOdeStopped = document.getElementById('wing-ode-stopped');
+    const wingOdeSpinning = document.getElementById('wing-ode-spinning');
     const svgElement = document.getElementById('spinner-svg');
     const container = document.getElementById('spinner-container');
     const btnToggle = document.getElementById('btn-toggle-spin');
@@ -920,6 +965,13 @@
       // Apply wing offsets
       wingEdo.setAttribute('transform', `translate(${-wingOffset.toFixed(2)}, 0)`);
       wingOde.setAttribute('transform', `translate(${wingOffset.toFixed(2)}, 0)`);
+
+      // Cross-fade right wing between stopped (upright EDOCODE) and spinning (mirrored C2 rotational symmetry EDO)
+      const morph = Math.max(0, Math.min(1, (wingOffset - 15) / 50));
+      if (wingOdeStopped && wingOdeSpinning) {
+        wingOdeStopped.style.opacity = (1 - morph).toFixed(3);
+        wingOdeSpinning.style.opacity = morph.toFixed(3);
+      }
 
       // Apply rotation to SVG rotor
       rotor.setAttribute('transform', `rotate(${angle.toFixed(2)})`);
