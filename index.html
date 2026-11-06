@@ -30,15 +30,15 @@
 
     html, body {
       width: 100%;
-      height: 100%;
-      height: 100dvh;
+      min-height: 100%;
       min-height: 100dvh;
       background-color: var(--bg);
       color: var(--white);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow: hidden;
-      position: fixed;
-      inset: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      position: relative;
       cursor: default;
     }
 
@@ -301,10 +301,16 @@
       opacity: 0.75;
     }
 
-    /* Mobile adjustments */
+    /* Mobile adjustments: enable natural vertical scrolling and proportional layout */
     @media (max-width: 768px) {
+      body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
       header {
-        padding: 14px 16px;
+        position: relative;
+        padding: 16px 20px 0;
         flex-direction: column;
         align-items: center;
         gap: 0px;
@@ -326,27 +332,37 @@
         letter-spacing: 0.08em;
       }
       .brand-hero-logo {
-        height: 22px;
-        max-width: 120px;
+        height: 24px;
+        max-width: 130px;
       }
       main {
-        gap: 16px;
-        padding-top: 86px;
-        padding-bottom: max(56px, calc(env(safe-area-inset-bottom, 20px) + 36px));
+        min-height: auto;
+        height: auto;
+        padding: 24px 16px 40px;
+        gap: 20px;
+        justify-content: flex-start;
       }
       .spinner-wrapper {
-        width: min(80vw, 42dvh);
-        height: min(80vw, 42dvh);
+        width: min(84vw, 360px);
+        height: min(84vw, 360px);
+        margin: 8px 0;
+        touch-action: pan-y; /* Allows vertical scrolling when dragging over spinner */
       }
       .btn-rect {
         padding: 10px 24px;
         font-size: 11px;
       }
       .bg-coming-soon {
-        bottom: max(16px, env(safe-area-inset-bottom, 16px));
-        font-size: clamp(34px, 11.5vw, 54px);
-        letter-spacing: -0.02em;
-        line-height: 0.9;
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        margin-top: 36px;
+        margin-bottom: max(32px, env(safe-area-inset-bottom, 32px));
+        font-size: clamp(38px, 12vw, 64px);
+        letter-spacing: -0.03em;
+        line-height: 0.85;
         opacity: 0.75;
       }
     }
@@ -357,9 +373,6 @@
   <!-- Ambient Grid & Particles -->
   <div class="bg-grid"></div>
   <canvas id="particles-canvas"></canvas>
-
-  <!-- Big Faded Web-Responsive "COMING SOON" Background Text (Reverse Fade) -->
-  <div class="bg-coming-soon" aria-hidden="true">COMING SOON</div>
 
   <!-- Top Brand Bar: Logo in top-left, instruction in top-center -->
   <header>
@@ -488,6 +501,9 @@
         <span id="btn-text">STOP &amp; ALIGN</span>
       </button>
     </div>
+
+    <!-- Big Faded Web-Responsive "COMING SOON" Background Text (Reverse Fade) -->
+    <div class="bg-coming-soon" aria-hidden="true">COMING SOON</div>
   </main>
 
   <script>
